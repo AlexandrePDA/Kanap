@@ -10,7 +10,7 @@ Cinquième projet du parcours "Développeur web" d'OpenClassroom. L'objectif est
 
 # Objectifs
 
-- Je dois unifier les travaux déjà réalisés (Back-End et Front-End) en intégrant dynamiquement les éléments de l'API dans les différentes pages web avec JavaScript. 
+- Unifier les travaux déjà réalisés (Back-End et Front-End) en intégrant dynamiquement les éléments de l'API dans les différentes pages web avec JavaScript. 
 - Mettre en place un plan de test d'acceptation.
 
 # Architecture générale
