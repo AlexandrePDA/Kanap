@@ -1,19 +1,29 @@
-let dataKanap = [];
+let dataKanap = "";
+// décalaration variable globale
 
-// fetch API Kanap, dataKanap posséde les données de l'API
-// kanapItem correspond maintenant à chaque canapé
-const fetchKanap = async() => {
-    await fetch('http://localhost:3000/api/products')
-    .then((response) => response.json())
-    .then((data) => {
-        dataKanap = data
-    })
-    
-    for(const kanapItem of dataKanap){
-            console.log(kanapItem);
+
+// Fonction pour requeter l'API sur l'ens. des produits
+const fetchKanap = () => {
+    fetch('http://localhost:3000/api/products/')
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.log(`Erreur : ${response.status}`); // Affiche sur la console l'erreur
+            alert("Une erreur est survenue lors du chargement de la page");
         }
-    };
+    })
+    .then((data) => {
+        dataKanap = data;   //stockage dans dataKanap
+        console.log(dataKanap[1].name); 
+        // for(let kanapItem in dataKanap){
+        //     console.log(kanapItem);
+        // }   
+    })
+}
+
+// Appel de l'API
+fetchKanap();
 
 
-fetchKanap()
 
