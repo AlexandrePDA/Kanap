@@ -32,25 +32,28 @@ const insertProduct = (dataKanap) => {
         const h3 = document.createElement("h3");
         const p= document.createElement("p"); 
         
-        // faire en sorte que les balises s'imbriquent l'une dans l'autre
+        // faire en sorte que les balises s'imbriquent les unes dans les autres
+        // y ajouter les caracteristiques de chaque element + integrer les classes 
         items.appendChild(card);
-        card.href = `./product.html?id=${kanapItem._id}`;
+        card.href = `./product.html?id=${kanapItem._id}`; // lien de chaque carte selon l'ID
         
         card.appendChild(article);
+
         article.appendChild(img);
-        img.src = kanapItem.imageUrl;
-        img.alt = kanapItem.altTxt;
+        img.src = kanapItem.imageUrl; // ajout de la source de l'img
+        img.alt = kanapItem.altTxt; // ajout de l'alt
         
         article.appendChild(h3);
-        h3.textContent = kanapItem.name;
-        h3.classList.add("productName");
+        h3.textContent = kanapItem.name; // ajout du title
+        h3.classList.add("productName"); // ajout de la classe 
         
         article.appendChild(p);
-        p.textContent = kanapItem.description;
-        p.classList.add("productDescription");
+        p.textContent = kanapItem.description; // ajout de la description
+        p.classList.add("productDescription"); // ajout de la classe
     }
     console.log(items);
 }
 
 // appel de la fonction
 fetchKanap();
+
