@@ -25,7 +25,7 @@ const fetchKanap = async () => {
 recupererId = () => {
     let settingURL = new URLSearchParams(window.location.search); //recuperer la 'queryString' de l'URL
     let param = settingURL.get("id"); // recuperer la valeur de 'id' dans l'URL
-    idRecupere = param; // stockage de "monParametre" dans la variable globale "idRecupere"
+    idRecupere = param; // stockage de "param" dans la variable globale "idRecupere"
     console.log(`Le paramètre récupéré dans l'URL est ${param}`); // Affichage du paramètre récupéré dans la console
     console.log(idRecupere);
 }
