@@ -1,7 +1,5 @@
-let dataKanap = "";
-
 // fonction pour appeller l'API
-const fetchKanap = async () => {
+const fetchKanaps = async () => {
     await fetch('http://localhost:3000/api/products/')
     .then((response) => {
         if (response.ok) {
@@ -20,11 +18,12 @@ const fetchKanap = async () => {
 }
 
 
+
+
 const insertProduct = (dataKanap) => {
     for(let kanapItem of dataKanap){ // casser le tableau
         // selectionner l'id Items sur l'HTML
         const items = document.querySelector("#items");
-        
         // création des balises a, article, img, h3 et p
         const card = document.createElement("a");
         const article = document.createElement("article");
@@ -51,9 +50,8 @@ const insertProduct = (dataKanap) => {
         p.textContent = kanapItem.description; // ajout de la description
         p.classList.add("productDescription"); // ajout de la classe
     }
-    console.log(items);
 }
 
 // appel de la fonction
-fetchKanap();
+fetchKanaps();
 
