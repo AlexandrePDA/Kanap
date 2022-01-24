@@ -10,7 +10,6 @@ const fetchKanap = async () => {
         }
     })
     .then((data) => {
-        console.log(data);
         dataKanap = data;
         insertProductDetails(dataKanap);
     })
@@ -26,8 +25,6 @@ recupererId = () => {
     let settingURL = new URLSearchParams(window.location.search); //recuperer la 'queryString' de l'URL
     let param = settingURL.get("id"); // recuperer la valeur de 'id' dans l'URL
     idRecupere = param; // stockage de "param" dans la variable globale "idRecupere"
-    console.log(`Le paramètre récupéré dans l'URL est ${param}`); // Affichage du paramètre récupéré dans la console
-    console.log(idRecupere);
 }
   
 insertProductDetails = (dataKanap) => {
@@ -67,3 +64,52 @@ insertProductDetails = (dataKanap) => {
 // appel des fonctions
 recupererId();
 fetchKanap();
+
+// ***************************************
+// AJOUT PANIER
+// ***************************************
+
+
+addCart = () => {
+    let addCart = document.getElementById('addToCart');
+    addCart.addEventListener('click', function () {
+        
+        // recuperation de la couleur
+        let colorChoice = document.getElementById('colors')
+        if (!colorChoice.value) {
+            alert('Veuillez selectionner une couleur') // si pas de couleur selectionnée = message d'erreur
+            return;
+        }
+
+        // recuperation de la quantite 
+        let quantityChoice = document.getElementById('quantity')
+        if (quantityChoice.value == 0 || quantityChoice.value > 100 ) {
+            alert('Merci de sélectionner une quantité comprise entre 1 et 100'); // si la quantité est égale à 0 ou si elle dépasse 100 = message d'erreur
+            return;
+        }
+
+        // recuperation de toutes les caracteristiques de l'article 
+        let itemInCart = {
+            id: dataKanap._id,
+            nom: dataKanap.name,
+            couleur: colorChoice.value,
+            quantite: quantityChoice.value,
+            prix: dataKanap.price,
+            description: dataKanap.description,
+            image: dataKanap.imageUrl,
+            texte: dataKanap.altText
+        }; // création d'un objet qui contient toutes les infos
+
+        console.log(itemInCart);
+
+        // ajout des informations liés à l'article dans le LOCAL STORAGE
+        let itemLocalStorage = localStorage.getItem('product');
+        console.log(typeof itemLocalStorage);
+
+    })
+
+} 
+
+
+addCart();
+
