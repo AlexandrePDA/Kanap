@@ -1,22 +1,15 @@
-// fonction pour appeller l'API
-const fetchKanaps = async () => {
-    await fetch('http://localhost:3000/api/products/')
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        }
-    })
-    .then((data) => {
+const fetchKanaps =  async () => {
+    try {
+        const response = await fetch('http://localhost:3000/api/products/');
+        const data = await response.json();
         console.log(data);
         dataKanap = data;
         insertProduct(dataKanap);
-    })
-    .catch((error) => {
-        console.log("Message d'erreur" + error);
-        alert("Une erreur est survenue lors du chargement de la page")
-    })
+    } catch (error) {
+        console.log(`Message d'erreur ${error}` );
+        alert('Une erreur est survenue lors du chargement de la page')
+    }
 }
-
 
 
 

@@ -2,22 +2,18 @@ let idRecupere = ""; // variable globale
 
 
 // fonction pour appeller l'API
-const fetchKanap = async () => {
-    await fetch(`http://localhost:3000/api/products/${idRecupere}`)
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        }
-    })
-    .then((data) => {
+const fetchKanap =  async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/products/${idRecupere}`);
+        const data = await response.json();
         dataKanap = data;
         insertProductDetails(dataKanap);
-    })
-    .catch((error) => {
-        console.log("Message d'erreur" + error);
-        alert("Une erreur est survenue lors du chargement de la page")
-    })
+    } catch (error) {
+        console.log(`Message d'erreur ${error}` );
+        alert('Une erreur est survenue lors du chargement de la page')
+    }
 }
+
 
 
 
@@ -32,8 +28,6 @@ insertProductDetails = (dataKanap) => {
     let price = document.getElementById('price');
     let description = document.getElementById('description');
     let colors = document.getElementById('colors');
-    // let option = document.createElement('option');
-    // let quantity = document.getElementById('quantity');
     let img = document.querySelector(".item__img");
     let title = document.getElementById('title');
     
@@ -71,13 +65,13 @@ fetchKanap();
 
 
 addCart = () => {
-    let addCart = document.getElementById('addToCart');
-    addCart.addEventListener('click', function () {
+    let addToCart = document.getElementById('addToCart');
+    addToCart.addEventListener('click', function () {
         
         // recuperation de la couleur
         let colorChoice = document.getElementById('colors')
         if (!colorChoice.value) {
-            alert('Veuillez selectionner une couleur') // si pas de couleur selectionnée = message d'erreur
+            alert('Veuillez sélectionner une couleur') // si pas de couleur selectionnée = message d'erreur
             return;
         }
 
@@ -104,12 +98,39 @@ addCart = () => {
 
         // ajout des informations liés à l'article dans le LOCAL STORAGE
         let itemLocalStorage = localStorage.getItem('product');
-        console.log(typeof itemLocalStorage);
-
-    })
-
+        console.log(typeof itemLocalStorage);  
+        if (itemLocalStorage == null) {
+            console.log(`Le panier ne contient aucun canapé`);
+            itemLocalStorage = []; // tableau vide qui sera complété par la suite
+            itemLocalStorage.push(itemInCart); // ajout item dans le tableau
+            localStorage.setItem("product", JSON.stringify(itemLocalStorage)); // save l'article dans le LocalStorage // stringify permet de transformer l'objet en chaine de caractere 
+        } else {
+            console.log(`le panier a un ou des canapés`);
+            itemLocalStorage = JSON.parse(itemLocalStorage); // string => objet
+            
+            
+            let findIndex = itemLocalStorage.findIndex((kanap) => kanap.id === itemInCart.id && kanap.couleur === itemInCart.couleur);
+            console.log(findIndex);
+            if (findIndex !== -1) {
+                itemLocalStorage[findIndex].quantite = parseInt(itemLocalStorage[findIndex].quantite) + parseInt(quantityChoice.value);
+                itemLocalStorage.push(itemInCart);
+                itemLocalStorage.pop();
+                console.log(itemLocalStorage);
+                console.log(typeof itemLocalStorage);
+                itemLocalStorage.setItem("product", JSON.stringify(itemLocalStorage));
+            } else {
+                itemLocalStorage.push(itemInCart);
+                console.log(itemLocalStorage);
+                console.log(typeof itemLocalStorage);
+                localStorage.setItem("product", JSON.stringify(itemLocalStorage));
+            }
+        }
+        console.log(itemLocalStorage);
+    });
 } 
 
 
 addCart();
 
+// *********************
+// revoir de la ligne 100 à 130
