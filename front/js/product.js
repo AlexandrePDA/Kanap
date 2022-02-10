@@ -117,5 +117,5 @@ addToCart.addEventListener('click', () => {
     } else {
         itemLocalStorage.push(itemInCart);
     }
-    localStorage.setItem('product', JSON.stringify(itemLocalStorage))    
+    localStorage.setItem('product', JSON.stringify(itemLocalStorage)) 
 });
