@@ -64,73 +64,58 @@ fetchKanap();
 // ***************************************
 
 
-addCart = () => {
-    let addToCart = document.getElementById('addToCart');
-    addToCart.addEventListener('click', function () {
+
+const addToCart = document.getElementById('addToCart');
+
+addToCart.addEventListener('click', () => {
         
-        // recuperation de la couleur
-        let colorChoice = document.getElementById('colors')
-        if (!colorChoice.value) {
-            alert('Veuillez sélectionner une couleur') // si pas de couleur selectionnée = message d'erreur
-            return;
-        }
+    // recuperation de la couleur
+    const colorChoice = document.getElementById('colors');
+    if (!colorChoice.value) {
+        alert('Veuillez sélectionner une couleur') // si pas de couleur selectionnée = message d'erreur
+        return;
+    }
 
-        // recuperation de la quantite 
-        let quantityChoice = document.getElementById('quantity')
-        if (quantityChoice.value == 0 || quantityChoice.value > 100 ) {
-            alert('Merci de sélectionner une quantité comprise entre 1 et 100'); // si la quantité est égale à 0 ou si elle dépasse 100 = message d'erreur
-            return;
-        }
+    // recuperation de la quantite 
+    const quantityChoice = document.getElementById('quantity')
+    if (quantityChoice.value == 0 || quantityChoice.value > 100 ) {
+        alert('Merci de sélectionner une quantité comprise entre 1 et 100'); // si la quantité est égale à 0 ou si elle dépasse 100 = message d'erreur
+        return;
+    }
 
-        // recuperation de toutes les caracteristiques de l'article 
-        let itemInCart = {
-            id: dataKanap._id,
-            nom: dataKanap.name,
-            couleur: colorChoice.value,
-            quantite: quantityChoice.value,
-            prix: dataKanap.price,
-            description: dataKanap.description,
-            image: dataKanap.imageUrl,
-            texte: dataKanap.altText
+    // recuperation de toutes les caracteristiques de l'article 
+    const itemInCart = {
+        id: dataKanap._id,
+        nom: dataKanap.name,
+        couleur: colorChoice.value,
+        quantite: parseInt(quantityChoice.value),
+        prix: dataKanap.price,
+        description: dataKanap.description,
+        image: dataKanap.imageUrl,
+        texte: dataKanap.altText
         }; // création d'un objet qui contient toutes les infos
 
-        console.log(itemInCart);
+    console.log(itemInCart);
 
-        // ajout des informations liés à l'article dans le LOCAL STORAGE
-        let itemLocalStorage = localStorage.getItem('product');
-        console.log(typeof itemLocalStorage);  
-        if (itemLocalStorage == null) {
-            console.log(`Le panier ne contient aucun canapé`);
-            itemLocalStorage = []; // tableau vide qui sera complété par la suite
-            itemLocalStorage.push(itemInCart); // ajout item dans le tableau
-            localStorage.setItem("product", JSON.stringify(itemLocalStorage)); // save l'article dans le LocalStorage // stringify permet de transformer l'objet en chaine de caractere 
-        } else {
-            console.log(`le panier a un ou des canapés`);
-            itemLocalStorage = JSON.parse(itemLocalStorage); // string => objet
-            
-            
-            let findIndex = itemLocalStorage.findIndex((kanap) => kanap.id === itemInCart.id && kanap.couleur === itemInCart.couleur);
-            console.log(findIndex);
-            if (findIndex !== -1) {
-                itemLocalStorage[findIndex].quantite = parseInt(itemLocalStorage[findIndex].quantite) + parseInt(quantityChoice.value);
-                itemLocalStorage.push(itemInCart);
-                itemLocalStorage.pop();
-                console.log(itemLocalStorage);
-                console.log(typeof itemLocalStorage);
-                itemLocalStorage.setItem("product", JSON.stringify(itemLocalStorage));
-            } else {
-                itemLocalStorage.push(itemInCart);
-                console.log(itemLocalStorage);
-                console.log(typeof itemLocalStorage);
-                localStorage.setItem("product", JSON.stringify(itemLocalStorage));
-            }
-        }
+    // ajout des informations liés à l'article dans le LOCAL STORAGE
+    let itemLocalStorage = JSON.parse(localStorage.getItem('product')) || [] ;
+    console.log(itemLocalStorage);  
+
+    const findItem = itemLocalStorage.find(
+        (kanap) => 
+            kanap.id == itemInCart.id && kanap.couleur == itemInCart.couleur);
+
+    if (findItem) {
+        findItem.quantite += itemInCart.quantite; 
+        itemLocalStorage = itemLocalStorage.map((item) => {
+            if (itemInCart.id == item.id && itemInCart.couleur == item.couleur) {
+                return findItem;
+            } 
+            return item; 
+        });
         console.log(itemLocalStorage);
-    });
-} 
-
-
-addCart();
-
-// *********************
-// revoir de la ligne 100 à 130
+    } else {
+        itemLocalStorage.push(itemInCart);
+    }
+    localStorage.setItem('product', JSON.stringify(itemLocalStorage))    
+});
