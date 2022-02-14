@@ -4,9 +4,9 @@ console.log(localStorageRecuperation); // verifie que le LS est bien présent da
 console.log(typeof localStorageRecuperation); // string => objet
 
 
-// *******************
-// tableau qui récapitule ce qui est dans le panier
-// *******************
+            // *******************
+            // tableau qui récapitule ce qui est dans le panier
+            // *******************
 
 showProductInCart = (localStorageRecuperation) => {
     for(let productInCart of localStorageRecuperation){
@@ -99,9 +99,9 @@ showProductInCart(localStorageRecuperation);
 
 
 
-// *******************
-// retirer ou ajouter des elements =>>>> à revoir
-// *******************
+            // *******************
+            // retirer ou ajouter des elements =>>>> à revoir
+            // *******************
 
 modifQuantity = (localStorageRecuperation) => {
     let quantityInput = document.querySelectorAll('.itemQuantity');
@@ -114,15 +114,15 @@ modifQuantity = (localStorageRecuperation) => {
             console.log(newQuantity);
             let idArticles    = quantityItem.dataset.id;
             console.log(idArticles);
-            // let idArticle     = '';
-            // let colorArticle  = '';
+            let idArticle     = '';
+            let colorArticle  = '';
 
             console.log(articles);
-            // for(let article of articles){
-            // idArticle       = article.dataset.id; // data-id
-            // console.log(idArticle);
-            // colorArticle    = article.dataset.couleur; // data-color
-            // }
+            for(let article of articles){
+            idArticle       = article.dataset.id; // data-id
+            console.log(idArticle);
+            colorArticle    = article.dataset.couleur; // data-color
+            }
 
             // localStorage
             let findIndexToModif = localStorageRecuperation.findIndex(
@@ -144,55 +144,134 @@ modifQuantity(localStorageRecuperation);
 
 
 
-// *******************
-// formulaire 
-// *******************
+            // *******************
+            // formulaire 
+            // *******************
 
-form = () => {
-    let form = document.querySelector(".cart__order__form"); 
-    console.log(form);
-    // prénom
-    form.firstName.addEventListener("change", () => {
-      firstNameValidate(this);
-    });
-    // nom
-    form.lastName.addEventListener("change", () => {
-      nameValidate(this); 
-    });
-    // adresse
-    form.address.addEventListener("change", () => {
-      adressValidate(this); 
-    });
-    // ville
-    form.city.addEventListener("change", () => {
-      cityValidate(this); 
-    });
-    // email
-    form.email.addEventListener("change", () => {
-      emailValidate(this); 
-    });
-  }
+// variables Regex
+let nameRegex   = /^[a-zA-Z\-çñàéèêëïîôüù ]{2,}$/;
+let addressRegex = /^[0-9a-zA-Z\s,.'-çñàéèêëïîôüù]{3,}$/;
+let emailRegex   = /^[A-Za-z0-9\-\.]+@([A-Za-z0-9\-]+\.)+[A-Za-z0-9-]{2,4}$/;
 
-  
-  // prenom
-  firstNameValidate = (firstNameSubmit) => {
-      // mise en place du RegExp
-      let firstNameRegExp = new RegExp("^[a-zA-Zàâäéèêëïîôöùûüÿç-]+$", "g");
-      
-      // test du RegExp
-      let firstNameTest = firstNameRegExp.test(firstNameSubmit.value); // prends en compte la saisie du client
-      console.log(firstNameTest);
-      
-      if(firstNameRegExp){
-          console.log('saisie correct');
-          let messageError = document.getElementById('firstNameErrorMsg');
-          messageError.textContent = '';
-        } else {
-            console.log('erreur');
-            let messageError = document.getElementById('firstNameErrorMsg');
-            messageError.textContent = 'Le prénom ne doit contenir ni des chiffres ni des caractères spéciaux !';
-        }
+// récupère les ids
+const firstName = document.getElementById('firstName');
+const lastName  = document.getElementById('lastName');
+const address   = document.getElementById('address');
+const city      = document.getElementById('city');
+const email     = document.getElementById('email');
+
+// firstName
+firstName.addEventListener('input', (e) => {
+    e.preventDefault();
+    if(nameRegex.test(firstName.value) == false || firstName.value == "") {
+        document.getElementById('firstNameErrorMsg').textContent = "Le prénom saisi n'est pas valide";
+        return false;
+    } else {
+        document.getElementById('firstNameErrorMsg').textContent = "";
+        return true;
     }
+});
 
-// appel de la fonction
-form();
+// lastName 
+lastName.addEventListener('input', (e) => {
+    e.preventDefault();
+    if(nameRegex.test(lastName.value) == false || lastName.value == ""){
+        document.getElementById('lastNameErrorMsg').textContent = "Le nom saisi n'est pas valide";
+        return false;
+    } else {
+        document.getElementById('lastNameErrorMsg').textContent = "";
+        return true;
+    }
+}); 
+
+// address
+address.addEventListener('input', (e) => {
+    e.preventDefault();
+    if(addressRegex.test(address.value) == false || address.value == "") {
+        document.getElementById('addressErrorMsg').textContent = "L'adresse saisie n'est pas valide";
+        return false;
+    } else {
+        document.getElementById('addressErrorMsg').textContent = "";
+        return true;
+    }
+});
+
+// city
+city.addEventListener('input', (e) => {
+    e.preventDefault();
+    if(nameRegex.test(city.value) == false || city.value == "") {
+        document.getElementById('cityErrorMsg').textContent = "La ville saisie n'est pas valide";
+        return false;
+    } else {
+        document.getElementById('cityErrorMsg').textContent = "";
+        return true;
+    }
+});
+
+// email
+email.addEventListener('input', (e) => {
+    e.preventDefault();
+    if(emailRegex.test(email.value) == false || email.value == "") {
+        document.getElementById('emailErrorMsg').textContent = "L'adresse mail saisie n'est pas valide";
+        return false;
+    } else {
+        document.getElementById('emailErrorMsg').textContent = "";
+        return true;
+    }
+});
+
+// commander
+const order = document.getElementById('order');
+
+order.addEventListener('click', (e) => {
+    e.preventDefault();
+    // récupère les données du client
+    let customerContact = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email:email.value,
+    };
+    // conditions
+    if(firstName.value === "" || 
+       lastName.value === "" || 
+       address.value === "" || 
+       city.value === "" || 
+       email.value === "") {
+        alert("Renseigner vos coordonnées afin de passer la commande.")
+    } else if(nameRegex.test(firstName.value) == false || 
+              nameRegex.test(lastName.value) == false || 
+              addressRegex.test(address.value) == false ||
+              nameRegex.test(city.value) == false || 
+              emailRegex.test(email.value) == false){
+                  alert('Renseigner correctement vos coordonnées afin de passer la commande.')
+              } else {
+                  let products = [];
+                  localStorageRecuperation.forEach((order) => {
+                      products.push(order.id);
+                  });
+                  let pageOrder = {customerContact, products};
+                  // envois des données à l'API
+                  fetch('http://localhost:3000/api/products/order', {
+                      method: "POST",
+                      headers: {
+                          Accept: {
+                            Accept: "application/json",
+                            "Content-type": "application/json",
+                          }  
+                      },
+                      body: JSON.stringify(pageOrder),
+                  })
+                  .then((res) => {
+                      return res.json();
+                  })
+                  .then((confirm) => {
+                    window.location.href = "./confirmation.html?orderId=" + confirm.orderId;
+                    localStorage.clear();
+                  })
+                  .catch((error) => {
+                      console.log(`erreur : ${error} `);
+                  });
+              }
+});
