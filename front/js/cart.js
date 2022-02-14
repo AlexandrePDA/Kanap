@@ -1,152 +1,147 @@
-let localStorageRecuperation = JSON.parse(localStorage.getItem('product'));
-console.log(localStorageRecuperation); // verifie que le LS est bien présent dans la page panier 
+const CART_KEY = 'product';
 
-console.log(typeof localStorageRecuperation); // string => objet
+// *******************
+// tableau qui récapitule ce qui est dans le panier + gére les quantités et le prix
+// *******************
 
-
-            // *******************
-            // tableau qui récapitule ce qui est dans le panier
-            // *******************
-
-showProductInCart = (localStorageRecuperation) => {
-    for(let productInCart of localStorageRecuperation){
-        console.log(productInCart);
-        // selection de l'element html
-        let cart = document.getElementById('cart__items');
-
-        // add des balises 
-        let baliseArticle = document.createElement('article'); 
-
-        let baliseDivImg = document.createElement('div');
-        let baliseImg = document.createElement('img');
-
-        let baliseDivContent = document.createElement('div');
-        let baliseDivDescription = document.createElement('div');
-        let baliseH2 = document.createElement('h2');
-        let balisePColor = document.createElement('p');
-        let balisePPrice = document.createElement('p');
-
-        let baliseDivSettings = document.createElement('div');
-        let baliseDivQuantity = document.createElement('div');
-        let balisePQuantity = document.createElement('p');
-        let baliseInputQuantity = document.createElement('input');
-
-        let baliseDivDelete = document.createElement('div');
-        let balisePDelete = document.createElement('p');
-
-        // add des balises et des classes
-            // article
+const showProductInCart = () => {
+    const localStorageRecuperation = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    const cart = document.getElementById('cart__items');
+    cart.innerHTML  = null;
+    let sumQuantity = 0;
+    let sumPrice    = 0;
+    for(const product of localStorageRecuperation){
+        const baliseArticle = createProduct(product);
         cart.appendChild(baliseArticle);
-        baliseArticle.classList.add('cart__item');
-        baliseArticle.dataset.id      = productInCart.id;
-        baliseArticle.dataset.couleur = productInCart.couleur;
+        sumQuantity += product.quantite;
+        sumPrice    += product.prix * product.quantite;
+    }
+    const totalQuantity     = document.getElementById('totalQuantity');
+    const totalPrice        = document.getElementById('totalPrice');
+    totalQuantity.innerHTML = sumQuantity;
+    totalPrice.innerHTML    = sumPrice;
+}
 
-            // img
-        baliseArticle.appendChild(baliseDivImg);
-        baliseDivImg.classList.add('cart__item__img');  
+// *******************
+// ajout des éléments sur le DOM + ajouter/retirer des élements 
+// *******************
+
+const createProduct = (product) => {
+    // add des balises 
+    let baliseArticle = document.createElement('article'); 
+
+    let baliseDivImg = document.createElement('div');
+    let baliseImg = document.createElement('img');
+
+    let baliseDivContent = document.createElement('div');
+    let baliseDivDescription = document.createElement('div');
+    let baliseH2 = document.createElement('h2');
+    let balisePColor = document.createElement('p');
+    let balisePPrice = document.createElement('p');
+
+    let baliseDivSettings = document.createElement('div');
+    let baliseDivQuantity = document.createElement('div');
+    let balisePQuantity = document.createElement('p');
+    let baliseInputQuantity = document.createElement('input');
+
+    let baliseDivDelete = document.createElement('div');
+    let balisePDelete = document.createElement('p');
+
+    // add des balises et des classes
+    // article
+    baliseArticle.classList.add('cart__item');
+    baliseArticle.dataset.id      = product.id;
+    baliseArticle.dataset.couleur = product.couleur;
+
+    // img
+    baliseArticle.appendChild(baliseDivImg);
+    baliseDivImg.classList.add('cart__item__img');  
         
-        baliseDivImg.appendChild(baliseImg);
-        baliseImg.src = productInCart.image;
-        baliseImg.alt = productInCart.texte;
+    baliseDivImg.appendChild(baliseImg);
+    baliseImg.src = product.image;
+    baliseImg.alt = product.texte;
 
-            // content
-        baliseArticle.appendChild(baliseDivContent);
-        baliseDivContent.classList.add('cart__item__content');
+    // content
+    baliseArticle.appendChild(baliseDivContent);
+    baliseDivContent.classList.add('cart__item__content');
 
-        baliseDivContent.appendChild(baliseDivDescription);
-        baliseDivDescription.classList.add('cart__item__content__description');
+    baliseDivContent.appendChild(baliseDivDescription);
+    baliseDivDescription.classList.add('cart__item__content__description');
 
-        baliseDivDescription.appendChild(baliseH2);
-        baliseH2.textContent = productInCart.nom;
+    baliseDivDescription.appendChild(baliseH2);
+    baliseH2.textContent = product.nom;
 
-        baliseDivDescription.appendChild(balisePColor);
-        balisePColor.textContent = productInCart.couleur;
+    baliseDivDescription.appendChild(balisePColor);
+    balisePColor.textContent = product.couleur;
 
-        baliseDivDescription.appendChild(balisePPrice);
-        balisePPrice.textContent = `${productInCart.prix} €`;
+    baliseDivDescription.appendChild(balisePPrice);
+    balisePPrice.textContent = `${product.prix} €`;
 
-            // settings
-        baliseArticle.appendChild(baliseDivSettings);
-        baliseDivSettings.classList.add('cart__item__content__settings');  
+    // settings
+    baliseArticle.appendChild(baliseDivSettings);
+    baliseDivSettings.classList.add('cart__item__content__settings');  
 
-        baliseDivSettings.appendChild(baliseDivQuantity);
-        baliseDivQuantity.classList.add('cart__item__content__settings__quantity');
+    baliseDivSettings.appendChild(baliseDivQuantity);
+    baliseDivQuantity.classList.add('cart__item__content__settings__quantity');
 
-        baliseDivQuantity.appendChild(balisePQuantity);
-        balisePQuantity.textContent = `Qté: ${productInCart.quantite}`;
+    baliseDivQuantity.appendChild(balisePQuantity);
+    balisePQuantity.textContent = `Qté: ${product.quantite}`;
 
-        baliseDivQuantity.appendChild(baliseInputQuantity);
-        baliseInputQuantity.type    = 'number';
-        baliseInputQuantity.classList.add('itemQuantity');
-        baliseInputQuantity.name    = "itemQuantity";
-        baliseInputQuantity.min     = '1';
-        baliseInputQuantity.max     = '100'
-        baliseInputQuantity.value   = productInCart.quantite;
+    baliseDivQuantity.appendChild(baliseInputQuantity);
+    baliseInputQuantity.type    = 'number';
+    baliseInputQuantity.classList.add('itemQuantity');
+    baliseInputQuantity.name    = "itemQuantity";
+    baliseInputQuantity.min     = '1';
+    baliseInputQuantity.max     = '100'
+    baliseInputQuantity.value   = product.quantite;
 
-            // delete
-        baliseArticle.appendChild(baliseDivDelete);
-        baliseDivDelete.classList.add('cart__item__content__settings__delete');
-
-        baliseDivDelete.appendChild(balisePDelete);
-        balisePDelete.classList.add('deleteItem');
-        balisePDelete.textContent = 'Supprimer';
-    }
-}
-
-
-// appel de la fonction
-showProductInCart(localStorageRecuperation);
-
-
-
-            // *******************
-            // retirer ou ajouter des elements =>>>> à revoir
-            // *******************
-
-modifQuantity = (localStorageRecuperation) => {
-    let quantityInput = document.querySelectorAll('.itemQuantity');
-    let articles      = document.querySelectorAll('article');
-    console.log(quantityInput);
-    
-    for(let quantityItem of quantityInput) {
-        quantityItem.addEventListener('change', (e) => {
-            let newQuantity   = e.target.value;
-            console.log(newQuantity);
-            let idArticles    = quantityItem.dataset.id;
-            console.log(idArticles);
-            let idArticle     = '';
-            let colorArticle  = '';
-
-            console.log(articles);
-            for(let article of articles){
-            idArticle       = article.dataset.id; // data-id
-            console.log(idArticle);
-            colorArticle    = article.dataset.couleur; // data-color
+    // ajouter des elements 
+    baliseInputQuantity.addEventListener('change', (e) => {
+        const value = e.target.value;
+        const localStorageRecuperation = JSON.parse(localStorage.getItem(CART_KEY)) ||  [];
+        const newArray = localStorageRecuperation.map(
+            (item) => {
+            if(item.id ==product.id && item.couleur == product.couleur){
+                return {
+                    ...item,
+                    quantite: value,
+                };
             }
+            return item;
+        });
+        localStorage.setItem(CART_KEY, JSON.stringify(newArray));
+        showProductInCart();
+    });
 
-            // localStorage
-            let findIndexToModif = localStorageRecuperation.findIndex(
-                (kanapModif) => 
-                    kanapModif.id === idArticles && kanapModif.couleur === colorArticle);
-            localStorageRecuperation[findIndexToModif].quantite = newQuantity;
-            console.log(newQuantity);
-            localStorageRecuperation.push(newQuantity);
-            localStorageRecuperation.pop();
-            console.log(typeof localStorageRecuperation); // => objet
-            localStorage.setItem('product', JSON.stringify(localStorageRecuperation));
-        })
-    }
+    // delete
+    baliseArticle.appendChild(baliseDivDelete);
+    baliseDivDelete.classList.add('cart__item__content__settings__delete');
+
+    baliseDivDelete.appendChild(balisePDelete);
+    balisePDelete.classList.add('deleteItem');
+    balisePDelete.textContent = 'Supprimer';
+
+    // retirer des éléments 
+    balisePDelete.addEventListener('click', () => {
+        const localStorageRecuperation = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        const newArray = localStorageRecuperation.filter(
+            (item) => !(item.id ==product.id && item.couleur == product.couleur)
+        );
+        localStorage.setItem(CART_KEY, JSON.stringify(newArray));
+        showProductInCart();
+    });
+    return baliseArticle;
 }
 
 
 // appel de la fonction
-modifQuantity(localStorageRecuperation);
+showProductInCart();
 
 
 
-            // *******************
-            // formulaire 
-            // *******************
+// *******************
+// formulaire 
+// *******************
 
 // variables Regex
 let nameRegex   = /^[a-zA-Z\-çñàéèêëïîôüù ]{2,}$/;
@@ -220,13 +215,18 @@ email.addEventListener('input', (e) => {
     }
 });
 
-// commander
+
+// *******************
+//  commander
+// *******************
+
 const order = document.getElementById('order');
 
 order.addEventListener('click', (e) => {
     e.preventDefault();
+    const localStorageRecuperation = JSON.parse(localStorage.getItem(CART_KEY)) || [];
     // récupère les données du client
-    let customerContact = {
+    let contact = {
         firstName: firstName.value,
         lastName: lastName.value,
         address: address.value,
@@ -251,15 +251,12 @@ order.addEventListener('click', (e) => {
                   localStorageRecuperation.forEach((order) => {
                       products.push(order.id);
                   });
-                  let pageOrder = {customerContact, products};
+                  let pageOrder = {contact, products};
                   // envois des données à l'API
                   fetch('http://localhost:3000/api/products/order', {
                       method: "POST",
                       headers: {
-                          Accept: {
-                            Accept: "application/json",
                             "Content-type": "application/json",
-                          }  
                       },
                       body: JSON.stringify(pageOrder),
                   })
