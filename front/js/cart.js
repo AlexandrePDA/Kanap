@@ -13,7 +13,7 @@ const showProductInCart = () => {
     for(const product of localStorageRecuperation){
         const baliseArticle = createProduct(product);
         cart.appendChild(baliseArticle);
-        sumQuantity += product.quantite;
+        sumQuantity += Number(product.quantite);
         sumPrice    += product.prix * product.quantite;
     }
     const totalQuantity     = document.getElementById('totalQuantity');
