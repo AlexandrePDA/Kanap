@@ -16,13 +16,14 @@ const fetchKanap =  async () => {
 
 
 
-
+// SearchParams => recupere l'ID
 recupererId = () => {
     let settingURL = new URLSearchParams(window.location.search); //recuperer la 'queryString' de l'URL
     let param = settingURL.get("id"); // recuperer la valeur de 'id' dans l'URL
     idRecupere = param; // stockage de "param" dans la variable globale "idRecupere"
 }
-  
+ 
+// création des fiches produits
 insertProductDetails = (dataKanap) => {
     // déclaration variables + ajout éléments
     let price = document.getElementById('price');
@@ -59,14 +60,15 @@ insertProductDetails = (dataKanap) => {
 recupererId();
 fetchKanap();
 
+
 // ***************************************
 // AJOUT PANIER
 // ***************************************
 
 
-
 const addToCart = document.getElementById('addToCart');
 
+// au click => récupération des informations
 addToCart.addEventListener('click', () => {
         
     // recuperation de la couleur

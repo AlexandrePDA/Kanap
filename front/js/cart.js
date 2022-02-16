@@ -1,7 +1,8 @@
 const CART_KEY = 'product';
 
 // *******************
-// tableau qui récapitule ce qui est dans le panier + gére les quantités et le prix
+// tableau qui récapitule ce qui est dans le panier 
+// + gére les quantités et le prix
 // *******************
 
 const showProductInCart = () => {
@@ -222,6 +223,7 @@ email.addEventListener('input', (e) => {
 
 const order = document.getElementById('order');
 
+// au click => les données du LS sont sauvegardées et envoyées à l'API
 order.addEventListener('click', (e) => {
     e.preventDefault();
     const localStorageRecuperation = JSON.parse(localStorage.getItem(CART_KEY)) || [];

@@ -1,3 +1,4 @@
+// appel API
 const fetchKanaps =  async () => {
     try {
         const response = await fetch('http://localhost:3000/api/products/');
@@ -12,7 +13,7 @@ const fetchKanaps =  async () => {
 }
 
 
-
+// ajout des cartes canapés 
 const insertProduct = (dataKanap) => {
     for(let kanapItem of dataKanap){ // casser le tableau
         // selectionner l'id Items sur l'HTML
