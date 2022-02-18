@@ -88,13 +88,8 @@ addToCart.addEventListener('click', () => {
     // recuperation de toutes les caracteristiques de l'article 
     const itemInCart = {
         id: dataKanap._id,
-        nom: dataKanap.name,
         couleur: colorChoice.value,
         quantite: parseInt(quantityChoice.value),
-        prix: dataKanap.price,
-        description: dataKanap.description,
-        image: dataKanap.imageUrl,
-        texte: dataKanap.altText
         }; // création d'un objet qui contient toutes les infos
 
     console.log(itemInCart);
