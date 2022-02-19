@@ -1,7 +1,13 @@
+// *******************
+// initialisation
+// *******************
+
+// remplacer 'product' par CART_KEY
 const CART_KEY = 'product';
 
 let kanaps = null;
 
+// Appel API
 const fetchKanaps = async () => {
     if (kanaps) {
         return kanaps;
@@ -16,6 +22,7 @@ const fetchKanaps = async () => {
     }
 }
 
+// return kanap dans le localStorage avec toutes les infos
 const getKanapLocalStorage = async () => {
     const listKanap = await fetchKanaps();
     const localStorageRecuperation = JSON.parse(localStorage.getItem(CART_KEY) || [] );
@@ -30,6 +37,7 @@ const getKanapLocalStorage = async () => {
 
 // *******************
 // tableau qui récapitule ce qui est dans le panier 
+// en l'affichant dans la baliseArticle
 // + gére les quantités et le prix
 // *******************
 
@@ -54,7 +62,8 @@ const showProductInCart = async () => {
 
 
 // *******************
-// ajout des éléments sur le DOM + ajouter/retirer des élements 
+// ajout des éléments sur le DOM 
+// + ajouter/retirer des élements 
 // *******************
 
 const createProduct = (product) => {

@@ -13,7 +13,7 @@ const fetchKanaps =  async () => {
 }
 
 
-// ajout des cartes canapés 
+// ajout des cartes canapés sur la homePage
 const insertProduct = (dataKanap) => {
     for(let kanapItem of dataKanap){ // casser le tableau
         // selectionner l'id Items sur l'HTML

@@ -65,7 +65,7 @@ fetchKanap();
 // AJOUT PANIER
 // ***************************************
 
-
+// selection de l'élèment dans l'HTML
 const addToCart = document.getElementById('addToCart');
 
 // au click => récupération des informations
@@ -85,19 +85,20 @@ addToCart.addEventListener('click', () => {
         return;
     }
 
-    // recuperation de toutes les caracteristiques de l'article 
+    // recuperation de l'id, la couleur et la quantité => pas le prix pour question de sécurité
     const itemInCart = {
         id: dataKanap._id,
         couleur: colorChoice.value,
         quantite: parseInt(quantityChoice.value),
-        }; // création d'un objet qui contient toutes les infos
+        }; // création d'un objet qui contient infos
 
     console.log(itemInCart);
 
     // ajout des informations liés à l'article dans le LOCAL STORAGE
+    // si kanap est de la même couleur et même id => additioner
     let itemLocalStorage = JSON.parse(localStorage.getItem('product')) || [] ;
     console.log(itemLocalStorage);  
-
+    
     const findItem = itemLocalStorage.find(
         (kanap) => 
             kanap.id == itemInCart.id && kanap.couleur == itemInCart.couleur);
